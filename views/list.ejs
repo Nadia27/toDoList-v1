@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>To Do List</title>
+  </head>
+  <body>
+    <h1><%=kindofDay%></h1>
+
+    <ul>
+      <!-- Add a new li for every element in newListItems arr -->
+      <% for (var i = 0; i < newListItems.length; i++) { %>
+        <li><%=newListItems[i]%></li>
+      <%}%>
+    </ul>
+
+    <form action="/" method="POST">
+      <input type="text" name="toDoItem">
+      <button type="submit" name="button">Add Item</button>
+    </form>
+
+  </body>
+</html>

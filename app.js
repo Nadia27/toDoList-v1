@@ -1,45 +1,60 @@
+
 // jshint esversion:6
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const date = require(__dirname + '/date.js');
 
 const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static('public'));
 
 app.set('view engine', 'ejs'); // Set view engine to 'ejs' templating
 
 // List of toDo items
-let tasks = ['Go to grocery store', 'Cook dinner', 'Help Xa with HW'];
+const tasks = ['Go to grocery store', 'Cook dinner', 'Help Xa with HW'];
+const workItems = [];
 
 app.get('/', (req, res) => {
+  const day = date.getDate();
 
-  // Creates an instance of Date object
-  let today = new Date();
-
-  // Date formatting style
-  let options = {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long'
-  };
-
-  // Return the Date obj as a string with specified options
-  let day = today.toLocaleDateString('en-US', options);
-
-  // Render formatted day in list.ejs template
+  // Render formatted day and tasks in list.ejs template
   res.render(`list`, {
-    kindofDay: day,
+    listTitle: day,
     newListItems: tasks
   });
 
 });
 
 app.post('/', (req, res) => {
-  let task = req.body.toDoItem;
-  tasks.push(task);
-  res.redirect('/');
+  const task = req.body.toDoItem;
+
+  if (req.body.list === 'Work') {
+    workItems.push(task);
+    res.redirect('/work');
+  } else {
+    tasks.push(task);
+    res.redirect('/');
+  }
 });
+
+app.get('/work', (req, res) => {
+  res.render(`list`, {
+    listTitle: "Work List",
+    newListItems: workItems
+  });
+});
+
+app.post('/work', (req, res) => {
+  let item = req.body.toDoItem;
+  workItems.push(item);
+  res.redirect('/work');
+});
+
+app.get('/about', (req, res) => {
+  res.render('about');
+})
 
 app.listen(3000, () => {
   console.log(`Server is running on port 3000`);

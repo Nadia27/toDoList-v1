@@ -3,7 +3,7 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const date = require(__dirname + '/date.js');
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -12,31 +12,63 @@ app.use(express.static('public'));
 
 app.set('view engine', 'ejs'); // Set view engine to 'ejs' templating
 
-// List of toDo items
-const tasks = ['Go to grocery store', 'Cook dinner', 'Help Xa with HW'];
-const workItems = [];
+mongoose.connect('mongodb://localhost:27017/todolistDB', { useNewUrlParser: true,
+useUnifiedTopology: true });
+
+const toDoSchema = {
+  name: String,
+};
+
+const Item = mongoose.model('Item', toDoSchema);
+
+const item1  = new Item({
+  name: "Welcome to your todolist!"
+});
+
+const item2 = new Item({
+  name: "Hit the + button to add a new item."
+});
+
+const item3 = new Item({
+  name: "<-- Hit this to delete and item."
+});
+
+const defaultItems = [item1, item2, item3];
+
+// Item.deleteOne({_id : "5df12a411f36194b8cc9041b"},(err) => {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log("Successfully deleted record");
+//   }
+// });
+
 
 app.get('/', (req, res) => {
-  const day = date.getDate();
-
-  // Render formatted day and tasks in list.ejs template
-  res.render(`list`, {
-    listTitle: day,
-    newListItems: tasks
+  Item.find({}, (err, results) => {
+    if (results.length === 0) {
+      Item.insertMany(defaultItems, (err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Successfully inserted items.")
+        }
+      });
+      res.redirect('/');
+    } else {
+      // Render formatted day and tasks in list.ejs template
+      res.render(`list`, {
+        listTitle: 'Today',
+        newListItems: results
+      });
+    }
   });
-
 });
 
 app.post('/', (req, res) => {
-  const task = req.body.toDoItem;
+  const itemName = req.body.toDoItem;
 
-  if (req.body.list === 'Work') {
-    workItems.push(task);
-    res.redirect('/work');
-  } else {
-    tasks.push(task);
-    res.redirect('/');
-  }
+
 });
 
 app.get('/work', (req, res) => {
@@ -46,11 +78,11 @@ app.get('/work', (req, res) => {
   });
 });
 
-app.post('/work', (req, res) => {
-  let item = req.body.toDoItem;
-  workItems.push(item);
-  res.redirect('/work');
-});
+// app.post('/work', (req, res) => {
+//   let item = req.body.toDoItem;
+//   workItems.push(item);
+//   res.redirect('/work');
+// });
 
 app.get('/about', (req, res) => {
   res.render('about');

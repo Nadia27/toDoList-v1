@@ -8,17 +8,21 @@
 
   <div class="box">
     <% newListItems.forEach(newListItem => { %>
-    <div class="item">
-      <!-- Add a new li for every element in newListItems arr -->
-      <input type="checkbox">
-      <p>
-        <%= newListItem.name %>
-      </p>
-    </div>
+      <form action="/delete" method="post">
+        <div class="item">
+        <!-- Add a new li for every element in newListItems arr -->
+          <input type="checkbox" onchange="this.form.submit()" name="checkbox" value="<%= newListItem._id %>">
+          <p>
+            <%= newListItem.name %>
+          </p>
+          <input type="hidden" name="listName" value="<%= listTitle %>"></input>
+        </div>
+      </form>
+
     <% }) %>
     <form class="item" action="/" method="POST">
       <input type="text" name="toDoItem" placeholder="New Item" autocomplete="off">
-      <button type="submit" name="list">+</button>
+      <button type="submit" name="list" value="<%= listTitle %>">+</button>
     </form>
 
   </div>

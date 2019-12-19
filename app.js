@@ -5,6 +5,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const _ = require('lodash');
+require('dotenv').config();
+
+const myUserName = process.env.USER_NAME;
+const myAccess = process.env.DATABASE_ACCESS;
 
 const app = express();
 
@@ -13,8 +17,8 @@ app.use(express.static('public'));
 
 app.set('view engine', 'ejs'); // Set view engine to 'ejs' templating
 
-mongoose.connect('mongodb://localhost:27017/todolistDB', { useNewUrlParser: true,
-useUnifiedTopology: true });
+mongoose.connect(`mongodb+srv://${myUserName}:${myAccess}@cluster0-sda6m.mongodb.net/todolistDB`, { useNewUrlParser: true,
+useUnifiedTopology: true, useFindAndModify: false });
 
 const toDoSchema = {
   name: String,
@@ -43,13 +47,6 @@ const listSchema = {
 
 const List = mongoose.model("List", listSchema);
 
-// Item.deleteOne({_id : "5df12a411f36194b8cc9041b"},(err) => {
-//   if (err) {
-//     console.log(err);
-//   } else {
-//     console.log("Successfully deleted record");
-//   }
-// });
 
 // Get current content of todoList from DB
 app.get('/', (req, res) => {
@@ -147,22 +144,6 @@ app.get('/:customListName', (req, res) => {
 
 
 
-// app.get('/work', (req, res) => {
-//   res.render(`list`, {
-//     listTitle: "Work List",
-//     newListItems: workItems
-//   });
-// });
-
-// app.post('/work', (req, res) => {
-//   let item = req.body.toDoItem;
-//   workItems.push(item);
-//   res.redirect('/work');
-// });
-
-// app.get('/about', (req, res) => {
-//   res.render('about');
-// })
 
 app.listen(3000, () => {
   console.log(`Server is running on port 3000`);

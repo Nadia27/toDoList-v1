@@ -50,6 +50,7 @@ const List = mongoose.model("List", listSchema);
 
 // Get current content of todoList from DB
 app.get('/', (req, res) => {
+
   Item.find({}, (err, results) => {
     if (results.length === 0) {
       Item.insertMany(defaultItems, (err) => {
@@ -104,11 +105,11 @@ app.post('/delete', (req, res) => {
 
   if (listName === "Today") {
     Item.findByIdAndRemove(checkedItemId, (err) => {
-      if (err) {
-        console.log(err);
+      if (!err) {
+        console.log('Successfully deleted checked item');
+        res.redirect('/');
       }
     });
-    res.redirect('/');
   } else {
     // Find Custom list and pull from items array
     List.findOneAndUpdate({name: listName}, {$pull:{items: {_id: checkedItemId}}}, (err, foundList) => {
@@ -126,8 +127,8 @@ app.get('/:customListName', (req, res) => {
   const customListName = _.capitalize(req.params.customListName);
   List.findOne({name: customListName}, (err, foundList) => {
     if (!err) {
-      // Create a new list
       if (!foundList) {
+        // Create a new list
         const list = new List({
           name: customListName,
           items: defaultItems

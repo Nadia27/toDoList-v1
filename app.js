@@ -20,6 +20,9 @@ app.set('view engine', 'ejs'); // Set view engine to 'ejs' templating
 mongoose.connect(`mongodb+srv://${myUserName}:${myAccess}@cluster0-sda6m.mongodb.net/todolistDB`, { useNewUrlParser: true,
 useUnifiedTopology: true, useFindAndModify: false });
 
+mongoose.connect("mongodb://localhost:27017/todolistDB", { useNewUrlParser: true,
+useUnifiedTopology: true, useFindAndModify: false });
+
 const toDoSchema = {
   name: String,
 };
@@ -72,7 +75,7 @@ app.get('/', (req, res) => {
 });
 
 
-// Get new task entry from form
+// Create new task for default list or custom list
 app.post('/', (req, res) => {
 
   // User entered task from form
@@ -118,13 +121,14 @@ app.post('/delete', (req, res) => {
       }
     });
   }
-  });
+});
 
 
 
 // Cutomized List
-app.get('/:customListName', (req, res) => {
+app.get("/:customListName", (req, res) => {
   const customListName = _.capitalize(req.params.customListName);
+
   List.findOne({name: customListName}, (err, foundList) => {
     if (!err) {
       if (!foundList) {
@@ -142,6 +146,8 @@ app.get('/:customListName', (req, res) => {
     }
   });
 });
+
+app.get('/favicon.ico', (req, res) => res.status(204));
 
 
 let port = process.env.PORT;

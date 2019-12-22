@@ -18,7 +18,7 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs'); // Set view engine to 'ejs' templating
 
 mongoose.connect(`mongodb+srv://${myUserName}:${myAccess}@cluster0-sda6m.mongodb.net/todolistDB`, { useNewUrlParser: true,
-useUnifiedTopology: true, useFindAndModify: false });
+useUnifiedTopology: true, useFindAndModify: false }); 
 
 mongoose.connect("mongodb://localhost:27017/todolistDB", { useNewUrlParser: true,
 useUnifiedTopology: true, useFindAndModify: false });

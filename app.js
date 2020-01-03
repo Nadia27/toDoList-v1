@@ -7,7 +7,6 @@ const mongoose = require('mongoose');
 const _ = require('lodash');
 require('dotenv').config();
 
-const myUserName = process.env.USER_NAME;
 const myAccess = process.env.DATABASE_ACCESS;
 
 const app = express();
@@ -17,17 +16,10 @@ app.use(express.static('public'));
 
 app.set('view engine', 'ejs'); // Set view engine to 'ejs' templating
 
-let connection = "mongodb://localhost:27017/todolistDB";
 
-if (connection == null || connection == "") {
-  connection = "mongodb+srv://${myUserName}:${myAccess}@cluster0-sda6m.mongodb.net/todolistDB";
-}
+mongoose.connect(`mongodb+srv://admin-nadia:${myAccess}@cluster0-sda6m.mongodb.net/todolistDB`, { useNewUrlParser: true,
+ useUnifiedTopology: true, useFindAndModify: false });
 
-// mongoose.connect(`mongodb+srv://${myUserName}:${myAccess}@cluster0-sda6m.mongodb.net/todolistDB`, { useNewUrlParser: true,
-// useUnifiedTopology: true, useFindAndModify: false });
-
-mongoose.connect(connection, { useNewUrlParser: true,
-useUnifiedTopology: true, useFindAndModify: false });
 
 const toDoSchema = {
   name: String,

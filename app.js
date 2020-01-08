@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const _ = require('lodash');
 require('dotenv').config();
 
-const myAccess = process.env.DATABASE_ACCES;
+const myAccess = process.env.DATABASE_ACCESS;
 
 const app = express();
 

@@ -13,7 +13,7 @@ To-Do List application with the ability to create different lists i.e. Work List
 * MongoDB Atlas
 
 
-## What I learned building the Sideline Story
+## What I learned building the To Do List
 
 *  What is EJS?
     * templating language/engine that generates HTML with plain JS
@@ -51,6 +51,14 @@ To-Do List application with the ability to create different lists i.e. Work List
   * Relationships. Relational and Non-relational
   * Scalability
 
+* Working with MongoDB with Node.JS using Object Document Mapping(ODM) Mongoose
+
 * CRUD operations
+
+  * ```db.collection.find()```
+  * ```db.collection.insertMany()```
+  * ```db.collection.findByIdAndRemove()```
+  * ```db.collection.findOneAndUpdate()```
+
 
 * Overall more comfort with Javascript, Node, and Express. <br/>
